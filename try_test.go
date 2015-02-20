@@ -16,10 +16,10 @@ func TestTryExample(t *testing.T) {
 		return "", nil
 	}
 	var value string
-	err := try.Do(func(attempt int) (error, bool) {
+	err := try.Do(func(attempt int) (bool, error) {
 		var err error
 		value, err = SomeFunction()
-		return err, attempt < 5 // try 5 times
+		return attempt < 5, err // try 5 times
 	})
 	if err != nil {
 		log.Fatalln("error:", err)
@@ -31,7 +31,7 @@ func TestTryExamplePanic(t *testing.T) {
 		panic("something went badly wrong")
 	}
 	var value string
-	err := try.Do(func(attempt int) (err error, retry bool) {
+	err := try.Do(func(attempt int) (retry bool, err error) {
 		retry = attempt < 5 // try 5 times
 		defer func() {
 			if r := recover(); r != nil {
@@ -49,9 +49,9 @@ func TestTryExamplePanic(t *testing.T) {
 func TestTryDoSuccessful(t *testing.T) {
 	is := is.New(t)
 	callCount := 0
-	err := try.Do(func(attempt int) (error, bool) {
+	err := try.Do(func(attempt int) (bool, error) {
 		callCount++
-		return nil, attempt < 5
+		return attempt < 5, nil
 	})
 	is.NoErr(err)
 	is.Equal(callCount, 1)
@@ -61,9 +61,9 @@ func TestTryDoFailed(t *testing.T) {
 	is := is.New(t)
 	theErr := errors.New("something went wrong")
 	callCount := 0
-	err := try.Do(func(attempt int) (error, bool) {
+	err := try.Do(func(attempt int) (bool, error) {
 		callCount++
-		return theErr, attempt < 5
+		return attempt < 5, theErr
 	})
 	is.Equal(err, theErr)
 	is.Equal(callCount, 5)
@@ -73,7 +73,7 @@ func TestTryPanics(t *testing.T) {
 	is := is.New(t)
 	theErr := errors.New("something went wrong")
 	callCount := 0
-	err := try.Do(func(attempt int) (err error, retry bool) {
+	err := try.Do(func(attempt int) (retry bool, err error) {
 		retry = attempt < 5
 		defer func() {
 			if r := recover(); r != nil {
@@ -93,8 +93,8 @@ func TestTryPanics(t *testing.T) {
 
 func TestRetryLimit(t *testing.T) {
 	is := is.New(t)
-	err := try.Do(func(attempt int) (error, bool) {
-		return errors.New("nope"), true
+	err := try.Do(func(attempt int) (bool, error) {
+		return true, errors.New("nope")
 	})
 	is.OK(err)
 	is.Equal(try.IsMaxRetries(err), true)

@@ -5,17 +5,17 @@ Idiomatic Go retry package
 
 Just call `try.Do` with the function you want to retry in the event of an error:
 
-  * Call `try.Do` that returns an `error` and a `bool` indicating whether to retry or not
+  * Call `try.Do` that returns a `bool` indicating whether to retry or not, and an `error` 
   * The `attempt` argument will start at 1 and count up
-  * `try.Do` blocks until the second argument is `false`, or there is no error
+  * `try.Do` blocks until you return `false`, or a `nil` error
   * `try.Do` returns the last error or `nil` if it was successful
 
 ```
 var value string
-err := try.Do(func(attempt int) (error, bool) {
+err := try.Do(func(attempt int) (bool, error) {
   var err error
   value, err = SomeFunction()
-  return err, attempt < 5 // try 5 times
+  return attempt < 5, err // try 5 times
 })
 if err != nil {
   log.Fatalln("error:", err)
@@ -35,7 +35,7 @@ Try supports retrying in the event of a panic.
 
 ```
 var value string
-err := try.Do(func(attempt int) (err error, retry bool) {
+err := try.Do(func(attempt int) (retry bool, err error) {
   retry = attempt < 5 // try 5 times
   defer func() {
     if r := recover(); r != nil {
@@ -56,13 +56,13 @@ To introduce a delay between retries, just make a `time.Sleep` call before you r
 
 ```
 var value string
-err := try.Do(func(attempt int) (error, bool) {
+err := try.Do(func(attempt int) (bool, error) {
   var err error
   value, err = SomeFunction()
   if err != nil {
     time.Sleep(1 * time.Minute) // wait a minute
   }
-  return err, attempt < 5
+  return attempt < 5, err
 })
 if err != nil {
   log.Fatalln("error:", err)
