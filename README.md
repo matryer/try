@@ -3,9 +3,6 @@ Idiomatic Go retry package
 
 ## Usage
 
-  * Call `try.Do` that returns an `error` and a `bool` indicating whether to retry or not
-  * The `attempt` argument will start at 1 and count up
-
 ```
 var value string
 err := try.Do(func(attempt int) (error, bool) {
@@ -18,6 +15,8 @@ if err != nil {
 }
 ```
 
+  * Call `try.Do` that returns an `error` and a `bool` indicating whether to retry or not
+  * The `attempt` argument will start at 1 and count up
   * The function will be called repeatedly until error is `nil`, while `attempt < 5` (i.e. try 5 times)
   * `try.Do` returns the last error or `nil` if it was successful
 
