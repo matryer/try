@@ -1,5 +1,5 @@
 # try
-Idiomatic Go retry package. Thanks to @rowland for code review.
+Idiomatic Go retry package. Thanks to [@rowland](https://github.com/rowland) for code review.
 
 ### Usage
 
