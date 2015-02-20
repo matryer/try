@@ -1,7 +1,7 @@
 # try
 Idiomatic Go retry package
 
-## Usage
+### Usage
 
 Just call `try.Do` with the function you want to retry in the event of an error:
 
