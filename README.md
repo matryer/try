@@ -50,7 +50,7 @@ if err != nil {
 
 #### Delay between retries
 
-To introduce a delay between retries, just make a `time.Sleep` call before you return from the function if you are returning an error. If there is no error, it will not retry.
+To introduce a delay between retries, just make a `time.Sleep` call before you return from the function if you are returning an error.
 
 ```
 var value string
