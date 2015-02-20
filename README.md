@@ -3,6 +3,8 @@ Idiomatic Go retry package
 
 ## Usage
 
+Just call `try.Do` with the function you want to retry in the event of an error:
+
 ```
 var value string
 err := try.Do(func(attempt int) (error, bool) {
@@ -31,6 +33,8 @@ try.MaxRetries = 20
 To see if a `Do` operation failed due to reaching the limit, you can check the `error` with `try.IsMaxRetries(err)`.
 
 #### Retrying panics
+
+Try supports retrying in the event of a panic.
 
   * Use named return parameters
   * Set `retry` first
