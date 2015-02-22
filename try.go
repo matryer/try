@@ -7,9 +7,12 @@ var MaxRetries = 10
 
 var errMaxRetriesReached = errors.New("exceeded retry limit")
 
+// Func represents functions that can be retried.
+type Func func(attempt int) (retry bool, err error)
+
 // Do keeps trying the function until the second argument
 // returns false, or no error is returned.
-func Do(fn func(attempt int) (retry bool, err error)) error {
+func Do(fn Func) error {
 	var err error
 	var cont bool
 	attempt := 1
