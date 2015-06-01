@@ -1,5 +1,10 @@
-# try
+# try [![GoDoc](https://godoc.org/github.com/matryer/try?status.svg)](https://godoc.org/github.com/matryer/try)
+
 Idiomatic Go retry package. Thanks to [@rowland](https://github.com/rowland) for code review.
+
+```
+go get gopkg.in/matryer/try.v1
+```
 
 ### Usage
 
