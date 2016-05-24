@@ -1,4 +1,4 @@
-# try [![GoDoc](https://godoc.org/github.com/matryer/try?status.svg)](https://godoc.org/github.com/matryer/try)
+# try [![GoDoc](https://godoc.org/github.com/matryer/try?status.svg)](https://godoc.org/github.com/matryer/try) [![Go Report Card](https://goreportcard.com/badge/github.com/matryer/try)](https://goreportcard.com/report/github.com/matryer/try)
 
 Idiomatic Go retry package. Thanks to [@rowland](https://github.com/rowland) for code review.
 
