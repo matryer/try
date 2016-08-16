@@ -5,7 +5,7 @@ Idiomatic Go retry package. Thanks to [@rowland](https://github.com/rowland) for
 ```
 go get gopkg.in/matryer/try.v1
 or
-gimme gopkg.in/matryer/try.v1
+drop gopkg.in/matryer/try.v1
 ```
 
 * Learn more about [Gimme](https://github.com/matryer/gimme)
