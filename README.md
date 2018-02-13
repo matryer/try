@@ -19,7 +19,7 @@ Just call `try.Do` with the function you want to retry in the event of an error:
   * `try.Do` blocks until you return `false`, or a `nil` error
   * `try.Do` returns the last error or `nil` if it was successful
 
-```
+```go
 var value string
 err := try.Do(func(attempt int) (bool, error) {
   var err error
@@ -42,7 +42,7 @@ Try supports retrying in the event of a panic.
   * Defer the recovery code, and set `err` manually in the case of a panic
   * Use empty `return` statement at the end
 
-```
+```go
 var value string
 err := try.Do(func(attempt int) (retry bool, err error) {
   retry = attempt < 5 // try 5 times
@@ -63,7 +63,7 @@ if err != nil {
 
 To introduce a delay between retries, just make a `time.Sleep` call before you return from the function if you are returning an error.
 
-```
+```go
 var value string
 err := try.Do(func(attempt int) (bool, error) {
   var err error
@@ -82,7 +82,7 @@ if err != nil {
 
 To avoid infinite loops, Try will ensure it only makes `try.MaxRetries` attempts. By default, this value is `10`, but you can change it:
 
-```
+```go
 try.MaxRetries = 20
 ```
 
