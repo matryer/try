@@ -11,7 +11,6 @@ import (
 )
 
 func TestTryExample(t *testing.T) {
-	try.MaxRetries = 20
 	SomeFunction := func() (string, error) {
 		return "", nil
 	}
@@ -65,7 +64,7 @@ func TestTryDoFailed(t *testing.T) {
 		callCount++
 		return attempt < 5, theErr
 	})
-	is.Equal(err, theErr)
+	is.Equal(err.Error(), "exceeded retry limit - something went wrong")
 	is.Equal(callCount, 5)
 }
 
@@ -87,15 +86,23 @@ func TestTryPanics(t *testing.T) {
 		err = theErr
 		return
 	})
-	is.Equal(err.Error(), "panic: I don't like three")
+	is.Equal(err.Error(), "exceeded retry limit - panic: I don't like three")
 	is.Equal(callCount, 5)
 }
 
 func TestRetryLimit(t *testing.T) {
 	is := is.New(t)
-	err := try.Do(func(attempt int) (bool, error) {
-		return true, errors.New("nope")
+	SomeFunction := func() (string, error) {
+		return "", errors.New("something went wrong")
+	}
+	var lastAttempt int
+	err := try.Do(func(attempt int) (retry bool, err error) {
+		_, err = SomeFunction()
+		retry = attempt < 15 // try 15 times
+		lastAttempt = attempt
+		return retry, err
 	})
-	is.OK(err)
-	is.Equal(try.IsMaxRetries(err), true)
+
+	is.Equal(err.Error(), "exceeded retry limit - something went wrong")
+	is.Equal(lastAttempt, 15)
 }
