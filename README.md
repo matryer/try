@@ -77,13 +77,3 @@ if err != nil {
   log.Fatalln("error:", err)
 }
 ```
-
-#### Maximum retry limit
-
-To avoid infinite loops, Try will ensure it only makes `try.MaxRetries` attempts. By default, this value is `10`, but you can change it:
-
-```
-try.MaxRetries = 20
-```
-
-To see if a `Do` operation failed due to reaching the limit, you can check the `error` with `try.IsMaxRetries(err)`.
