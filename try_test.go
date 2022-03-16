@@ -15,10 +15,9 @@ func TestTryExample(t *testing.T) {
 	SomeFunction := func() (string, error) {
 		return "", nil
 	}
-	var value string
 	err := try.Do(func(attempt int) (bool, error) {
 		var err error
-		value, err = SomeFunction()
+		_, err = SomeFunction()
 		return attempt < 5, err // try 5 times
 	})
 	if err != nil {
@@ -30,7 +29,6 @@ func TestTryExamplePanic(t *testing.T) {
 	SomeFunction := func() (string, error) {
 		panic("something went badly wrong")
 	}
-	var value string
 	err := try.Do(func(attempt int) (retry bool, err error) {
 		retry = attempt < 5 // try 5 times
 		defer func() {
@@ -38,7 +36,7 @@ func TestTryExamplePanic(t *testing.T) {
 				err = errors.New(fmt.Sprintf("panic: %v", r))
 			}
 		}()
-		value, err = SomeFunction()
+		_, err = SomeFunction()
 		return
 	})
 	if err != nil {
